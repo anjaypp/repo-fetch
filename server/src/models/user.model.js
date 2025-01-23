@@ -40,6 +40,15 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  followers_url:{
+    type: String
+  },
+  following_url:{
+    type:String
+  },
+  repos_url:{
+    type:String
+  },
   friends: [
     {
       type: mongoose.Schema.Types.ObjectId,

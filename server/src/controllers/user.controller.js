@@ -7,7 +7,7 @@ const createUser = async (req, res) => {
 
   try {
     // Check if the user already exists in the database
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ username, isDeleted: false });
     if (existingUser) {
       return res.status(200).json(existingUser);
     }
@@ -39,11 +39,14 @@ const createUser = async (req, res) => {
             bio: userData.bio,
             location: userData.location,
             blog: userData.blog,
-            created_at: userData.created_at,
             public_repos: userData.public_repos,
             public_gists: userData.public_gists,
             followers: userData.followers,
             following: userData.following,
+            followers_url: userData.followers_url,
+            following_url: userData.following_url,
+            repos_url: userData.repos_url,
+            created_at: userData.created_at,
           });
 
           await newUser.save();
