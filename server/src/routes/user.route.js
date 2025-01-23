@@ -8,4 +8,6 @@ router.post('/users/:user', userController.createUser);
 
 router.get('/users/search', userController.searchUsers);
 
+router.delete('/users/:user', userController.deleteUser);
+
 module.exports = router;

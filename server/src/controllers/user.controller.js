@@ -93,11 +93,34 @@ const searchUsers = async (req, res) => {
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
-  }
+  };
 
+  const deleteUser = async (req, res) => {
+    const username  = req.params.user;
 
-  
+    try {
+        const user = await User.findOne({ username });
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Check if already soft-deleted
+        if (user.isDeleted) {
+            return res.status(400).json({ message: 'User is already deleted' });
+        }
+
+        // Soft delete the user by setting isDeleted to true
+        await User.findOneAndUpdate({ username }, { $set: { isDeleted: true } });
+
+        res.json({ message: 'User soft-deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = { 
   createUser,
-  searchUsers
+  searchUsers,
+  deleteUser
  };
