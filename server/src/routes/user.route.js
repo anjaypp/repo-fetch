@@ -10,4 +10,7 @@ router.get('/users/search', userController.searchUsers);
 
 router.delete('/users/:user', userController.deleteUser);
 
+router.put('/users/:user', userController.updateUser);
+
+
 module.exports = router;

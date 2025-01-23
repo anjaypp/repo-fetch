@@ -119,8 +119,32 @@ const searchUsers = async (req, res) => {
     }
 };
 
+  const updateUser = async (req, res) => {
+    const username  = req.params.user;
+    const {name, location, blog , bio } = req.body;
+
+    try{
+      const user = await User.findOneAndUpdate(
+        {username, isDeleted: false},
+        {$set: { name, location, blog, bio}},
+        {new: true}
+      );
+    
+
+    if(!user){
+      return res.status(404).json({message: 'User not found or is deleted'});
+    }
+
+    return res.status(404).json({ message: 'User updated successfully' });
+  } catch (error){
+    return res.status(500).json({ message: 'Failed to update user', error: error.message});
+  }
+};
+
+
 module.exports = { 
   createUser,
   searchUsers,
-  deleteUser
+  deleteUser,
+  updateUser,
  };
