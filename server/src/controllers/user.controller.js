@@ -141,10 +141,32 @@ const searchUsers = async (req, res) => {
   }
 };
 
+const sortUsers = async (req ,res) => {
+  try{
+    // Retrieve sorting field from query
+    const sortField = req.query.sortBy || 'created_at';
+    const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+
+    // Checking whether fields are valid
+    const validFields = ['public_repos', 'public_gists', 'followers', 'following', 'created_at'];
+    if (!validFields.includes(sortField)) {
+      return res.status(400).json({ error: `Invalid sort field. Valid fields are: ${validFields.join(', ')}` });
+    }
+
+    //Fetch users from database and sort
+    const users = await User.find({ isDeleted: false}).sort({[sortField] : sortOrder});
+    return res.status(200).json(users);
+  }
+  catch (error){
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 
 module.exports = { 
   createUser,
   searchUsers,
   deleteUser,
   updateUser,
+  sortUsers
  };

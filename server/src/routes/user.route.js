@@ -12,5 +12,6 @@ router.delete('/users/:user', userController.deleteUser);
 
 router.put('/users/:user', userController.updateUser);
 
+router.get('/users', userController.sortUsers);
 
 module.exports = router;
