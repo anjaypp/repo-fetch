@@ -1,5 +1,6 @@
 const { generateOptions } = require('../util/util');
 const https = require('https');
+const axios = require('axios');
 const User = require('../models/user.model');
 
 const createUser = async (req, res) => {
@@ -69,4 +70,34 @@ const createUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser };
+const searchUsers = async (req, res) => {
+  try{
+    const { username, location } = req.query;
+
+    const query = { isDeleted: false };
+
+    if(username){
+      query.username = { $regex: username, $options: 'i' };
+    }
+    if(location){
+      query.location = { $regex: location, $options: 'i' };
+      }
+      // Fetch user from database
+      const user = await User.findOne(query);
+  
+      if (users.length === 0) {
+        return res.status(404).json({ message: 'No users found matching the criteria' });
+      }
+  
+      return res.status(200).json(user);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
+
+  
+module.exports = { 
+  createUser,
+  searchUsers
+ };
