@@ -80,23 +80,29 @@ const findAndSaveMutualFriends = async (req, res) => {
   const username = req.params.user;
 
   try {
-    // Step 1: Retrieve the user from the database.
+    
     const user = await User.findOne({ username, isDeleted: false });
 
-    // If the user doesn't exist, return 404.
+    
     if (!user) {
       return res.status(404).json({ message: 'User not found in the database' });
     }
 
-    // Step 2: Retrieve `followers_url` and `following_url` from the database.
+    
+    if (user.friends && user.friends.length > 0) {
+      return res.status(200).json({
+        message: 'Mutual friends retrieved from the database',
+        friends: user.friends,
+      });
+    }
+
     let { followers_url, following_url } = user;
 
-    // Adjust GitHub's `following_url` to remove the placeholder `/other_user`.
+    
     following_url = following_url.replace('{/other_user}', '');
 
-    // Step 3: Fetch followers and following data using the stored URLs.
     const headers = {
-      Authorization: config.GITHUB_ACCESS_TOKEN,
+      Authorization: `token ${config.GITHUB_ACCESS_TOKEN}`,
     };
 
     const [followersResponse, followingResponse] = await Promise.all([
@@ -104,27 +110,36 @@ const findAndSaveMutualFriends = async (req, res) => {
       axios.get(following_url, { headers }),
     ]);
 
-    // Step 4: Extract followers and following usernames from the responses.
-    const followers = followersResponse.data.map((follower) => follower.login);
-    const following = followingResponse.data.map((followedUser) => followedUser.login);
+    const followers = followersResponse.data.map((follower) => ({
+      username: follower.login,
+      profilePicture: follower.avatar_url,
+    }));
 
-    // Step 5: Find mutual followers (users who are both following and followers).
-    const mutualFriends = following.filter((user) => followers.includes(user));
+    const following = followingResponse.data.map((followedUser) => ({
+      username: followedUser.login,
+      profilePicture: followedUser.avatar_url,
+    }));
 
-    // Step 6: Save the mutual friends back to the database.
+    const mutualFriends = following.filter((followedUser) =>
+      followers.some((follower) => follower.username === followedUser.username)
+    );
+
+    
     user.friends = mutualFriends;
     await user.save();
 
-    // Step 7: Return the list of mutual friends.
+    
     res.status(200).json({
-      message: 'Mutual friends saved successfully',
-      mutualFriends,
+      message: 'Mutual friends fetched from GitHub API and saved to the database',
+      friends: mutualFriends,
     });
   } catch (error) {
     console.error('Error finding mutual friends:', error.message);
     res.status(500).json({ error: 'Failed to find and save mutual friends' });
   }
 };
+
+
 
 const searchUsers = async (req, res) => {
   try {

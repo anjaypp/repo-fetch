@@ -51,8 +51,8 @@ const UserSchema = new mongoose.Schema({
   },
   friends: [
     {
-      type: [String],
-      default: [],
+      username: { type: String, required: true },
+      profilePicture: { type: String, required: true },
     },
   ],
   isDeleted: {
