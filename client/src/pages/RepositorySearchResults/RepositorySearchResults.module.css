@@ -1,0 +1,43 @@
+/* RepositorySearchResults.module.css */
+
+.repository_search_title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 20px 0;
+  color: #333;
+}
+
+.repository_search_results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.repository_list {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.repository_search_results .loading,
+.repository_search_results .error {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #ff3333;
+}
+
+@media (max-width: 768px) {
+  .repository_search_title {
+    font-size: 1.5rem;
+  }
+
+  .repository_list {
+    flex-direction: row;
+    align-items:flex-start;
+  }
+}
