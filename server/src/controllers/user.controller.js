@@ -5,16 +5,16 @@ const config = require('../config/config')
 const User = require("../models/user.model");
 
 const createUser = async (req, res) => {
-  const username = req.params.user;
+  const username = req.params.username; 
 
   try {
-    // Check if the user already exists in the database
+    // Looking for user in database before calling Github API
     const existingUser = await User.findOne({ username, isDeleted: false });
     if (existingUser) {
       return res.status(200).json(existingUser);
     }
 
-    // Fetch user data from GitHub API
+    // If no data is on database, we call the Github API
     const options = generateOptions("/users/" + username);
 
     https
@@ -29,12 +29,12 @@ const createUser = async (req, res) => {
           try {
             const userData = JSON.parse(data);
 
-            // Handle "User not found" case
+            // Notifying user if no user is found after calling Github API  
             if (userData.message === "Not Found") {
               return res.status(404).json({ message: "User not found" });
             }
 
-            // Save user data to the database
+            // Saving user to database
             const newUser = new User({
               username: userData.login,
               name: userData.name,
@@ -77,18 +77,15 @@ const createUser = async (req, res) => {
 };
 
 const findAndSaveMutualFriends = async (req, res) => {
-  const username = req.params.user;
+  const username = req.params.username; // Use req.params.username here
 
   try {
-    
     const user = await User.findOne({ username, isDeleted: false });
 
-    
     if (!user) {
       return res.status(404).json({ message: 'User not found in the database' });
     }
 
-    
     if (user.friends && user.friends.length > 0) {
       return res.status(200).json({
         message: 'Mutual friends retrieved from the database',
@@ -97,8 +94,6 @@ const findAndSaveMutualFriends = async (req, res) => {
     }
 
     let { followers_url, following_url } = user;
-
-    
     following_url = following_url.replace('{/other_user}', '');
 
     const headers = {
@@ -124,11 +119,9 @@ const findAndSaveMutualFriends = async (req, res) => {
       followers.some((follower) => follower.username === followedUser.username)
     );
 
-    
     user.friends = mutualFriends;
     await user.save();
 
-    
     res.status(200).json({
       message: 'Mutual friends fetched from GitHub API and saved to the database',
       friends: mutualFriends,
@@ -138,8 +131,6 @@ const findAndSaveMutualFriends = async (req, res) => {
     res.status(500).json({ error: 'Failed to find and save mutual friends' });
   }
 };
-
-
 
 const searchUsers = async (req, res) => {
   try {
@@ -153,23 +144,21 @@ const searchUsers = async (req, res) => {
     if (location) {
       query.location = { $regex: location, $options: "i" };
     }
-    // Fetch user from database
-    const user = await User.findOne(query);
 
-    if (user.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No users found matching the criteria" });
+    const users = await User.find(query);
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found matching the criteria" });
     }
 
-    return res.status(200).json(user);
+    return res.status(200).json(users);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
 const deleteUser = async (req, res) => {
-  const username = req.params.user;
+  const username = req.params.username; // Use req.params.username here
 
   try {
     const user = await User.findOne({ username });
@@ -178,12 +167,10 @@ const deleteUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Check if already soft-deleted
     if (user.isDeleted) {
       return res.status(400).json({ message: "User is already deleted" });
     }
 
-    // Soft delete the user by setting isDeleted to true
     await User.findOneAndUpdate({ username }, { $set: { isDeleted: true } });
 
     res.json({ message: "User soft-deleted successfully" });
@@ -193,7 +180,7 @@ const deleteUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const username = req.params.user;
+  const username = req.params.username; // Use req.params.username here
   const { name, location, blog, bio } = req.body;
 
   try {
@@ -207,7 +194,7 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ message: "User not found or is deleted" });
     }
 
-    return res.status(404).json({ message: "User updated successfully" });
+    return res.status(200).json({ message: "User updated successfully" });
   } catch (error) {
     return res
       .status(500)
@@ -217,11 +204,9 @@ const updateUser = async (req, res) => {
 
 const sortUsers = async (req, res) => {
   try {
-    // Retrieve sorting field from query
     const sortField = req.query.sortBy || "created_at";
     const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
 
-    // Checking whether fields are valid
     const validFields = [
       "public_repos",
       "public_gists",
@@ -230,16 +215,11 @@ const sortUsers = async (req, res) => {
       "created_at"
     ];
     if (!validFields.includes(sortField)) {
-      return res
-        .status(400)
-        .json({
-          error: `Invalid sort field. Valid fields are: ${validFields.join(
-            ", "
-          )}`
-        });
+      return res.status(400).json({
+        error: `Invalid sort field. Valid fields are: ${validFields.join(", ")}`
+      });
     }
 
-    //Fetch users from database and sort
     const users = await User.find({ isDeleted: false }).sort({
       [sortField]: sortOrder
     });

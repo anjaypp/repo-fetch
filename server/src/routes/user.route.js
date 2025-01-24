@@ -1,19 +1,23 @@
 const express = require('express');
 const userController = require('../controllers/user.controller');
-
 const router = express.Router();
 
-//Fetch user data from GitHub API and save to database
-router.post('/users/:user', userController.createUser);
+// Fetch user data from GitHub API and save to database
+router.post('/users/:username', userController.createUser);
 
-router.get('/users/:user/friends', userController.findAndSaveMutualFriends);
+// Find and save mutual friends
+router.get('/users/:username/friends', userController.findAndSaveMutualFriends);
 
+// Search users by query params
 router.get('/users/search', userController.searchUsers);
 
-router.delete('/users/:user', userController.deleteUser);
+// Delete user by username
+router.delete('/users/:username', userController.deleteUser);
 
-router.put('/users/:user', userController.updateUser);
+// Update user data by username
+router.put('/users/:username', userController.updateUser);
 
+// Sort users by field
 router.get('/users', userController.sortUsers);
 
 module.exports = router;
