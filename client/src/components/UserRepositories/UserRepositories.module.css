@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  gap: 12px;
+  padding: 8px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo img{
+    width: 48px;
+    height: 48px;
+    background: #1e1e1e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+.text_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.repo_name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0d1117;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.repo_description {
+  font-size: 14px;
+  color: #57606a;
+  margin-top: 2px;
+}
