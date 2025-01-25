@@ -1,3 +1,8 @@
+.repositories_container {
+  background-color: #f4f4f4;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .container {
   display: flex;
   align-items: center;
@@ -36,4 +41,5 @@
   font-size: 14px;
   color: #57606a;
   margin-top: 2px;
+  overflow: hidden;
 }
