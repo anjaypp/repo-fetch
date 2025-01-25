@@ -77,7 +77,7 @@ const createUser = async (req, res) => {
 };
 
 const findAndSaveMutualFriends = async (req, res) => {
-  const username = req.params.username; // Use req.params.username here
+  const username = req.params.username;
 
   try {
     const user = await User.findOne({ username, isDeleted: false });
@@ -158,7 +158,7 @@ const searchUsers = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const username = req.params.username; // Use req.params.username here
+  const username = req.params.username;
 
   try {
     const user = await User.findOne({ username });
@@ -180,7 +180,7 @@ const deleteUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const username = req.params.username; // Use req.params.username here
+  const username = req.params.username;
   const { name, location, blog, bio } = req.body;
 
   try {
