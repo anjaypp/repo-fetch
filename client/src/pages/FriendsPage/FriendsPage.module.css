@@ -1,5 +1,34 @@
+.container{
+  width:70%;
+  margin:0 auto;
+}
 .profilePicture {
   height: 50px;
   width: 50px;
   border-radius: 50%;
 }
+
+.friendCard {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+}
+
+.back_button {
+  height: 25px;
+  width: 25px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.header_container {
+  display: flex;
+  align-items: center;
+  gap: 15px; 
+}
+
+.pageHeading {
+  margin-left: 10px;
+}
+

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { IoMdArrowBack } from "react-icons/io";
 import styles from "./FriendsPage.module.css";
 
 const FriendsPage = () => {
@@ -13,19 +14,20 @@ const FriendsPage = () => {
     const fetchFriends = async () => {
       try {
         const response = await fetch(`http://localhost:4000/api/v1/users/${username}/friends`, {
+          method: "GET",
           headers: {
-            "Cache-Control": "no-cache",
+            "Content-Type": "application/json",
           },
         });
-        const data = await response.json();
-        if (response.ok) {
-          setFriends(data.friends);
-        } else {
-          setError(data.message);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch mutual friends");
         }
+        const data = await response.json();
+        setFriends(data.friends || []);
       } catch (error) {
         console.error("Error fetching mutual friends:", error.message);
-        setError("Error fetching mutual friends");
+        setError(error.message || "Error fetching mutual friends");
       } finally {
         setLoading(false);
       }
@@ -41,27 +43,33 @@ const FriendsPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({}),
       });
-  
+
       if (!response.ok) {
-        throw new Error("Failed to create user");
+        throw new Error("Failed to fetch friend data");
       }
-  
-      navigate(`/users/${friendUsername}`);
+
+      const userData = await response.json();
+      navigate(`/users/${friendUsername}`, { state: { userData } });
     } catch (error) {
-      console.error("Error creating user:", error);
-      setError("Error creating user");
+      console.error("Error fetching friend data:", error.message);
+      alert("Failed to fetch friend details. Please try again.");
     }
   };
-  
 
   if (loading) return <div>Loading friends...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  function goBack() {
+    navigate(-1);
+  }
+
   return (
-    <div>
-      <h2>{username}'s Mutual Followers</h2>
+    <div className={styles.container}>
+      <div className={styles.header_container}>
+        <IoMdArrowBack className={styles.back_button} onClick={goBack} />
+        <h2 className={styles.pageHeading}>{username}'s Mutual Followers</h2>
+      </div>
       {friends.length === 0 ? (
         <p>No mutual friends found.</p>
       ) : (
