@@ -1,64 +1,85 @@
-
 .homepage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .form_container {
-    background-color: #f4f4f4;
-    box-shadow: 0 4px 8px rgba(23, 23, 23, 0.2);
-    border-radius: 8px;
-    padding: 24px;
-    max-width: 400px;
-    width: 100%;
-  }
-  
-  .form_title {
-    font-size: 25px;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .form_label {
-    font-size: 13px;
-    color: #555;
-    margin-left: 4px;
-  }
-  
-  .form_input {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline: none;
-    transition: border 0.3s ease;
-  }
-  
-  .form_input:focus {
-    border-color: #007bff;
-  }
-  
-  .form_button {
-    background-color: #007bff;
-    color: #ffffff;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .form_button:hover {
-    background-color: #0056b3;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  transition: justify-content 0.3s ease;
+}
+
+.form_container {
+  background-color: #f4f4f4;
+  box-shadow: 0 4px 8px rgba(23, 23, 23, 0.2);
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 400px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form_title {
+  font-size: 25px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form_label {
+  font-size: 13px;
+  color: #555;
+  margin-left: 4px;
+}
+
+.form_input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.form_input:focus {
+  border-color: #007bff;
+}
+
+.form_button {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form_button:hover {
+  background-color: #0056b3;
+}
+
+.repository_search_results {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 20px;
+  padding: 20px;
+  border-top: 1px solid #ddd;
+  text-align: center;
+}
+
+.repository_search_title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.repository_list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

@@ -4,16 +4,15 @@ import styles from './HomePage.module.css';
 
 const HomePage = () => {
   const [username, setUsername] = useState('');
-  const [error, setError] = useState(''); // State to store error message
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Clear any previous error messages
+    setError(''); 
 
     if (username.trim()) {
       try {
-        // Changed to GET method as per backend route
         const response = await fetch(`http://localhost:4000/api/v1/users/${username}`, {
           method: 'POST',
           headers: {
@@ -22,18 +21,17 @@ const HomePage = () => {
         });
 
         if (!response.ok) {
-          throw new Error('User not found or failed to fetch data'); // Handle errors properly
+          throw new Error('User not found or failed to fetch data'); 
         }
 
         const userData = await response.json();
-        // Pass userData to the next page (RepositorySearchResults)
         navigate(`/users/${username}`, { state: { userData } });
       } catch (error) {
         console.error('Error fetching user:', error);
-        setError(error.message); // Set the error message to display to the user
+        setError(error.message);
       }
     } else {
-      setError('Please enter a valid username'); // Handle empty username case
+      setError('Please enter a valid username'); 
     }
   };
 
@@ -53,7 +51,7 @@ const HomePage = () => {
             Search
           </button>
         </form>
-        {error && <p className={styles.error_message}>{error}</p>} {/* Display error message */}
+        {error && <p className={styles.error_message}>{error}</p>}
       </div>
     </div>
   );
