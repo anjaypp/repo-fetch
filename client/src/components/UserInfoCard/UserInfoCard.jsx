@@ -8,13 +8,13 @@ const UserInfoCard = ({ userData }) => {
   return (
     <div className={styles.user_info}>
       <div className={styles.user_avatar}>
-        <img src={userData.avatar_url} alt={`${userData.name}'s avatar`} />
+        <img src={userData.avatar_url || userData.profilePicture} alt={`${userData.name}'s avatar`} />
       </div>
       <div className={styles.user_details}>
         <h2>{userData.name}</h2>
         <p>{userData.username}</p>
-        <p>{userData.location}</p>
-        <p>{userData.bio}</p>
+        <p>{userData.location || "No location provided"}</p>
+        <p>{userData.bio || 'Not available'}</p>
         <div className={styles.user_stats}>
           <span>Followers: {userData.followers}</span>
           <span>Following: {userData.following}</span>

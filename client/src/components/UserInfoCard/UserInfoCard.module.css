@@ -58,11 +58,12 @@
   
   .user_details .user_stats .view_friends_button {
     background-color: #007acc;
-    color: #fff;
+    color: #fff !important;
     border: none;
     padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
     text-decoration: none;
-     color: inherit;
+    color: inherit;
   }
+  
