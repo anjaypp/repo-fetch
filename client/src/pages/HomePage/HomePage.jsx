@@ -1,37 +1,40 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styles from './HomePage.module.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./HomePage.module.css";
 
 const HomePage = () => {
-  const [username, setUsername] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); 
+    setError("");
 
     if (username.trim()) {
       try {
-        const response = await fetch(`http://localhost:4000/api/v1/users/${username}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await fetch(
+          `https://repo-fetch.onrender.com/api/v1/users/${username}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }
+        );
 
         if (!response.ok) {
-          throw new Error('User not found or failed to fetch data'); 
+          throw new Error("User not found or failed to fetch data");
         }
 
         const userData = await response.json();
         navigate(`/users/${username}`, { state: { userData } });
       } catch (error) {
-        console.error('Error fetching user:', error);
+        console.error("Error fetching user:", error);
         setError(error.message);
       }
     } else {
-      setError('Please enter a valid username'); 
+      setError("Please enter a valid username");
     }
   };
 

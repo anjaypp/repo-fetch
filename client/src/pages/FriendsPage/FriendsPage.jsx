@@ -13,12 +13,15 @@ const FriendsPage = () => {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/api/v1/users/${username}/friends`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `https://repo-fetch.onrender.com/api/v1/users/${username}/friends`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch mutual friends");
@@ -38,12 +41,15 @@ const FriendsPage = () => {
 
   const handleFriendClick = async (friendUsername) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/users/${friendUsername}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://repo-fetch.onrender.com/api/v1/users/${friendUsername}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch friend data");
