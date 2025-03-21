@@ -1,78 +1,62 @@
-const { generateOptions } = require("../util/util");
 const https = require("https");
 const axios = require("axios");
 const config = require('../config/config')
 const User = require("../models/user.model");
 
+const GITHUB_ACCESS_TOKEN = config.GITHUB_ACCESS_TOKEN;
+const GITHUB_USER_AGENT = config.GITHUB_USER_AGENT;
+
 const createUser = async (req, res) => {
-  const username = req.params.username; 
+  const username = req.params.username;
 
   try {
-    // Looking for user in database before calling Github API
+    // Check if user exists in DB
     const existingUser = await User.findOne({ username, isDeleted: false });
     if (existingUser) {
       return res.status(200).json(existingUser);
     }
 
-    // If no data is on database, we call the Github API
-    const options = generateOptions("/users/" + username);
+    // GitHub API Request with Access Token
+    const githubResponse = await axios.get(`https://api.github.com/users/${username}`, {
+      headers: {
+        Authorization: `token ${GITHUB_ACCESS_TOKEN}`,
+        "User-Agent": GITHUB_USER_AGENT, 
+      },
+    });
 
-    https
-      .get(options, (response) => {
-        let data = "";
+    if (!githubResponse.data || githubResponse.data.message === "Not Found") {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-        response.on("data", (chunk) => {
-          data += chunk;
-        });
+    // Save user to DB
+    const userData = githubResponse.data;
+    const newUser = new User({
+      username: userData.login,
+      name: userData.name,
+      avatar_url: userData.avatar_url,
+      bio: userData.bio,
+      location: userData.location,
+      blog: userData.blog,
+      public_repos: userData.public_repos,
+      public_gists: userData.public_gists,
+      followers: userData.followers,
+      following: userData.following,
+      followers_url: userData.followers_url,
+      following_url: userData.following_url,
+      repos_url: userData.repos_url,
+      created_at: userData.created_at,
+    });
 
-        response.on("end", async () => {
-          try {
-            const userData = JSON.parse(data);
-
-            // Notifying user if no user is found after calling Github API  
-            if (userData.message === "Not Found") {
-              return res.status(404).json({ message: "User not found" });
-            }
-
-            // Saving user to database
-            const newUser = new User({
-              username: userData.login,
-              name: userData.name,
-              avatar_url: userData.avatar_url,
-              bio: userData.bio,
-              location: userData.location,
-              blog: userData.blog,
-              public_repos: userData.public_repos,
-              public_gists: userData.public_gists,
-              followers: userData.followers,
-              following: userData.following,
-              followers_url: userData.followers_url,
-              following_url: userData.following_url,
-              repos_url: userData.repos_url,
-              created_at: userData.created_at
-            });
-
-            await newUser.save();
-
-            // Return the newly saved user data
-            return res.status(200).json(newUser);
-          } catch (error) {
-            return res
-              .status(500)
-              .json({ message: "Failed to process GitHub API response" });
-          }
-        });
-      })
-      .on("error", (error) => {
-        return res
-          .status(500)
-          .json({
-            message: "Failed to fetch user from GitHub",
-            error: error.message
-          });
-      });
+    await newUser.save();
+    return res.status(200).json(newUser);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    if (error.response && error.response.status === 404) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (error.response && error.response.status === 403) {
+      return res.status(403).json({ message: "Rate limit exceeded or invalid token" });
+    }
+    return res.status(500).json({ message: "Failed to fetch user from GitHub", error: error.message });
   }
 };
 
