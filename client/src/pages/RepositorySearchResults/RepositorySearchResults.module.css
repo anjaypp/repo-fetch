@@ -1,53 +1,96 @@
-.container{
-  width:70%;
-  margin:0 auto;
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
 }
+
 .repository_search_title {
   text-align: center;
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: bold;
   margin: 20px 0;
   color: #333;
+  word-wrap: break-word;
 }
 
 .back_button {
-  height: 25px;
-  width: 25px;
+  height: 30px;
+  width: 30px;
   cursor: pointer;
-  margin-top: 50px;
-  margin-right: 10px;
+  margin: 20px 0;
+  transition: transform 0.2s ease;
+}
+
+.back_button:hover {
+  transform: scale(1.1);
 }
 
 .repository_search_results {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  gap: 30px;
+  padding: 20px 0;
 }
 
 .repository_list {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 20px;
-  justify-content: center;
   margin-top: 20px;
 }
 
 .repository_search_results .loading,
 .repository_search_results .error {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #ff3333;
+  padding: 20px;
 }
 
+/* Tablet styles */
 @media (max-width: 768px) {
-  .repository_search_title {
-    font-size: 1.5rem;
+  .container {
+    width: 95%;
+    padding: 15px;
   }
-
+  
+  .repository_search_results {
+    gap: 20px;
+    padding: 15px 0;
+  }
+  
   .repository_list {
-    flex-direction: row;
-    align-items:flex-start;
+    gap: 15px;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .repository_search_title {
+    margin: 15px 0;
+  }
+  
+  .back_button {
+    height: 25px;
+    width: 25px;
+    margin: 15px 0;
+  }
+  
+  .repository_search_results {
+    gap: 15px;
+    padding: 10px 0;
+  }
+  
+  .repository_list {
+    gap: 10px;
   }
 }

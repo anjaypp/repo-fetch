@@ -1,69 +1,179 @@
 .user_info {
-    display: flex;
-    background-color: #f4f4f4;
-    border-radius: 12px;
-    padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .user_avatar {
-    margin-right: 20px;
-  }
-  
-  .user_avatar img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #ffffff;
-  }
-  
-  .user_details {
-    display: flex;
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e5e9;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user_info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.user_avatar {
+  margin-right: 24px;
+  flex-shrink: 0;
+}
+
+.user_avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.user_avatar img:hover {
+  transform: scale(1.05);
+}
+
+.user_details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.user_details h2 {
+  margin: 0 0 8px 0;
+  color: #24292f;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.user_details p {
+  margin: 4px 0;
+  color: #656d76;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.user_details p:nth-child(2) {
+  color: #0969da;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.user_details p:nth-child(4) {
+  font-style: italic;
+  color: #656d76;
+  margin-bottom: 16px;
+}
+
+.user_details .user_stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  align-items: center;
+}
+
+.user_details .user_stats span {
+  background-color: #f6f8fa;
+  color: #24292f;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid #d0d7de;
+  transition: background-color 0.2s ease;
+}
+
+.user_details .user_stats span:hover {
+  background-color: #f0f3f6;
+}
+
+.user_details .user_stats .view_friends_button {
+  background-color: #0969da;
+  color: #ffffff !important;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.user_details .user_stats .view_friends_button:hover {
+  background-color: #0858b9;
+  transform: translateY(-1px);
+}
+
+/* Tablet styles */
+@media (max-width: 768px) {
+  .user_info {
     flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .user_avatar {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .user_avatar img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .user_details {
+    align-items: center;
+  }
+
+  .user_details .user_stats {
     justify-content: center;
   }
-  
+}
+
+/* Mobile styles */
+@media (max-width: 480px) {
+  .user_info {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .user_avatar img {
+    width: 80px;
+    height: 80px;
+  }
+
   .user_details h2 {
-    margin: 0 0 5px 0;
-    color: #333;
-    font-size: 25px;
+    font-size: 1.5rem;
   }
-  
+
   .user_details p {
-    margin: 5px 0;
-    color: #666;
+    font-size: 0.9rem;
   }
-  
-  .user_details p:nth-child(2) {
-    color: #999;
-    font-style: italic;
-  }
-  
+
   .user_details .user_stats {
-    display: flex;
-    gap: 15px;
-    margin-top: 15px;
-    color: #555;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
   }
-  
+
   .user_details .user_stats span {
-    background-color: #e0e0e0;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 14px;
+    width: 100%;
+    text-align: center;
   }
-  
+
   .user_details .user_stats .view_friends_button {
-    background-color: #007acc;
-    color: #fff !important;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
+    width: 100%;
+    text-align: center;
   }
-  
+}
