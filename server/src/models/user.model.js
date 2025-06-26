@@ -40,14 +40,14 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  followers_url:{
+  followers_url: {
     type: String
   },
-  following_url:{
-    type:String
+  following_url: {
+    type: String
   },
-  repos_url:{
-    type:String
+  repos_url: {
+    type: String
   },
   friends: [
     {
@@ -57,10 +57,12 @@ const UserSchema = new mongoose.Schema({
   ],
   isDeleted: {
     type: Boolean,
-    default: false, 
+    default: false,
   },
 }, {
-  timestamps: true, 
+  timestamps: true,
 });
+
+UserSchema.index({username: "text"});
 
 module.exports = mongoose.model('User', UserSchema);

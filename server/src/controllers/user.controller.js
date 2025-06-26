@@ -123,7 +123,7 @@ const searchUsers = async (req, res) => {
     const query = { isDeleted: false };
 
     if (username) {
-      query.username = { $regex: username, $options: "i" };
+      query.username = { $text : { $search: username } };
     }
     if (location) {
       query.location = { $regex: location, $options: "i" };
